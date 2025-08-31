@@ -1,6 +1,6 @@
-import { NextRequest, NextResponse } from "next/server";
+import { NextResponse } from "next/server";
 
-export async function DELETE(request: NextRequest) {
+export async function DELETE() {
     return NextResponse.json(
         {
             message: "Data deleted successfully"

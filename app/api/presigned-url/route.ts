@@ -1,5 +1,5 @@
 import { ListObjectsV2Command, S3Client } from "@aws-sdk/client-s3";
-import { NextRequest, NextResponse } from "next/server";
+import { NextResponse } from "next/server";
 import { getSignedUrl } from "@aws-sdk/s3-request-presigner";
 
 const client = new S3Client({
@@ -10,7 +10,7 @@ const client = new S3Client({
 	}
 });
 
-export async function GET(request: NextRequest) {
+export async function GET() {
 	const input = {
 		Bucket: "s3-clone-project"
 	};

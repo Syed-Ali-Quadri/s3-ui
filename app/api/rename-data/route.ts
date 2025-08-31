@@ -1,6 +1,6 @@
-import { NextRequest, NextResponse } from "next/server";
+import { NextResponse } from "next/server";
 
-export async function Put(request: NextRequest) {
+export async function Put() {
     return NextResponse.json(
         {
             message: "Data renamed successfully"
