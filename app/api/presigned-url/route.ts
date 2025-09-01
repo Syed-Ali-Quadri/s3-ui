@@ -1,6 +1,6 @@
-import { ListObjectsV2Command, S3Client } from "@aws-sdk/client-s3";
-import { NextResponse } from "next/server";
+import { S3Client, PutObjectCommand } from "@aws-sdk/client-s3";
 import { getSignedUrl } from "@aws-sdk/s3-request-presigner";
+import { NextResponse } from "next/server";
 
 const client = new S3Client({
 	region: "us-east-1",
@@ -10,22 +10,19 @@ const client = new S3Client({
 	}
 });
 
-export async function GET() {
-	const input = {
-		Bucket: "s3-clone-project"
-	};
+export async function GET(req: Request) {
+	const { searchParams } = new URL(req.url);
+	const fileName = searchParams.get("fileName")!;
+	const filePath = searchParams.get("filePath") || "";
+	const fileType = searchParams.get("fileType")!;
 
-	const command = new ListObjectsV2Command(input);
-	const url = await getSignedUrl(client, command, {
-		expiresIn: 5000
+	const command = new PutObjectCommand({
+		Bucket: "s3-clone-project",
+		Key: `${filePath}/${fileName}`,
+		ContentType: fileType
 	});
 
-	return NextResponse.json(
-		{
-			data: url
-		},
-		{
-			status: 201
-		}
-	);
+	const url = await getSignedUrl(client, command, { expiresIn: 3600 });
+
+	return NextResponse.json({ url }, { status: 200 });
 }
